@@ -4352,6 +4352,7 @@ Transform:
   m_Children:
   - {fileID: 2046406555}
   - {fileID: 1782356019}
+  - {fileID: 1964602099}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1243360508
@@ -8088,8 +8089,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pipeName: MyPipe
-  lotsController: {fileID: 1699042034}
   displayText: {fileID: 773190231}
+  itemManager: {fileID: 2046406556}
 --- !u!4 &1964602099
 Transform:
   m_ObjectHideFlags: 0
@@ -8098,12 +8099,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1964602097}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 151.8954, y: 799.0333, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 165.6669, y: 794.20514, z: -11.881073}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1226224304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2004794128
 GameObject:
@@ -8189,6 +8190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2046406555}
+  - component: {fileID: 2046406556}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -8211,6 +8213,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1226224304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2046406556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046406554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f675917b3dfed47ab6c5aaac10e7e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waferPrefab: {fileID: 2455522348059763856, guid: b22c3b1c5d044cd4298776386d61419e, type: 3}
+  stackMapPrefab: {fileID: 0}
+  noInkMapPrefab: {fileID: 0}
+  gradeColorPrefab: {fileID: 0}
+  waferParent: {fileID: 3670696130443452828, guid: b22c3b1c5d044cd4298776386d61419e, type: 3}
+  stackMapParent: {fileID: 0}
+  noInkMapParent: {fileID: 0}
+  gradeColorParent: {fileID: 0}
 --- !u!1 &2087509852
 GameObject:
   m_ObjectHideFlags: 0
@@ -15214,4 +15236,3 @@ SceneRoots:
   - {fileID: 170172810}
   - {fileID: 1884161821}
   - {fileID: 1226224304}
-  - {fileID: 1964602099}

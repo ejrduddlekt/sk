@@ -17,6 +17,7 @@ MonoBehaviour:
     - cb6c81296662d1e45a9193447c1e1864
     - 99c9720ab356a0642a771bea13969a05
     - 3a094688e73b8cc40a95817140a7e20f
+    - 
     values:
     - goDatasByGlobalId:
         keys: []
@@ -40,13 +41,14 @@ MonoBehaviour:
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1699042030-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-268228960-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-2046406554-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1964602097-0
         values:
         - iColor: 0
           icon: Canvas Icon
         - iColor: 0
           icon: Camera Icon
         - iColor: 0
-          icon: Camera Icon
+          icon: 
         - iColor: 0
           icon: PreMatCylinder
         - iColor: 0
@@ -69,8 +71,10 @@ MonoBehaviour:
           icon: PreMatQuad
         - iColor: 0
           icon: Settings Icon
+        - iColor: 0
+          icon: 
       goDatasByInstanceId:
-        keys: 582f0300042e03003e2f0300de2d03004c67ffff9e2e0300162e0300762e03000065ffffaa64ffffb263ffff2c2f0300f42d03009e410300ea3f030078410300b43f03006a410300b8400300fc3f03007440030092410300c0400300ac40030062410300d23f030098c6fdff
+        keys: 582f0300042e03003e2f0300de2d03004c67ffff9e2e0300162e0300762e03000065ffffaa64ffffb263ffff2c2f0300f42d03009e410300ea3f030078410300b43f03006a410300b8400300fc3f03007440030092410300c0400300ac40030062410300d23f030098c6fdff14420100e03f0100f2410100983f0100e4410100d0400100f43f01008a400100fa410100e0400100cc400100b2410100c83f01002c420100be5201007a5001009c520100305001008e5201007a5101008e50010034510100a45201008a510100765101005c52010062500100d6520100c85201009e740100547201007c7401000a7201006e74010054730100687201000e7301008474010064730100507301003c7401003c720100b6740100a8740100168a0100cc870100f489010082870100e6890100cc880100e087010086880100fc890100dc880100c8880100b4890100b48701002e8a0100208a0100309a0100e69701000e9a01009c970100009a0100e6980100fa970100a0980100169a0100f6980100e2980100ce990100ce970100489a01003a9a0100eca40100b2a20100caa401006aa20100bca40100a2a30100c6a201005ca30100d2a40100b2a301009ea301008aa401009aa2010004a50100f6a40100fca8010030aa010028aa010010a90100
         values:
         - iColor: 0
           icon: Canvas Icon
@@ -126,6 +130,198 @@ MonoBehaviour:
           icon: PreMatQuad
         - iColor: 0
           icon: Settings Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: PreMatCylinder
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Light Icon
+        - iColor: 0
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: PreMatCylinder
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Light Icon
+        - iColor: 0
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: PreMatCylinder
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Light Icon
+        - iColor: 0
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: PreMatCylinder
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Light Icon
+        - iColor: 0
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: PreMatCylinder
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Light Icon
+        - iColor: 0
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: PreMatCylinder
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: Light Icon
+        - iColor: 0
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 1
+          icon: 
+        - iColor: 0
+          icon: 
+        - iColor: 1
+          icon: 
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
     - goDatasByGlobalId:
         keys: []
         values: []
