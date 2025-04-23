@@ -13,7 +13,6 @@ public class NamedPipeManualClient : MonoBehaviour
 {
     [Header("Pipe Settings")]
     [SerializeField] private string pipeName = "MyPipe";
-    [SerializeField] private LotsController lotsController;
 
     [Header("UI References")]
     [SerializeField] private TMP_Text displayText;      // 수신 메시지 표시
@@ -108,7 +107,7 @@ public class NamedPipeManualClient : MonoBehaviour
             WaferList parsedData = JsonUtility.FromJson<WaferList>(msg);
             displayText.text = $"파싱 성공: {parsedData.wafer_list.Count}개";
 
-            lotsController.SetLotItems(parsedData.wafer_list);
+            // 덕영쓰 여기서부터 작업하면됨!
 
             //try
             //{
