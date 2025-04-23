@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class StackMapView : MonoBehaviour, IRecordView<Data.StackMap>
+public class StackMapView : UIComponent, IRecordView<Data.StackMap>
 {
     [Header("Primary IDs")]
     [SerializeField] TMP_Text lotIdText;
@@ -26,8 +26,9 @@ public class StackMapView : MonoBehaviour, IRecordView<Data.StackMap>
     private Data.StackMap _data;
     public event Action<Data.StackMap> OnClicked;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         //// 필수 참조 누락 체크
         //if (lotIdText == null) Debug.LogError($"{name}: lotIdText is not assigned!", this);
         //if (wfIdText == null) Debug.LogError($"{name}: wfIdText is not assigned!", this);

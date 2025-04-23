@@ -3,13 +3,17 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class NoInkMapGradeColorView : MonoBehaviour, IRecordView<Data.NoInkMapGradeColor>
+public class NoInkMapGradeColorView : UIComponent, IRecordView<Data.NoInkMapGradeColor>
 {
     [SerializeField] TMP_Text binCharText, gradeText, passText, remarkText, foreColorText, backColorText;
     private Data.NoInkMapGradeColor _data;
     public event Action<Data.NoInkMapGradeColor> OnClicked;
 
-    void Awake() { /* null checks */ }
+    protected override void Awake() 
+    {
+        base.Awake();
+        /* null checks */ 
+    }
     public void Init(Data.NoInkMapGradeColor data)
     {
         if (data == null) return;

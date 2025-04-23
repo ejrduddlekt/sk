@@ -3,15 +3,16 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class WaferView : MonoBehaviour, IRecordView<Data.Wafer>
+public class WaferView : UIComponent, IRecordView<Data.Wafer>
 {
     [SerializeField] TMP_Text lotIdText;
     [SerializeField] TMP_Text wfIdText;
     private Data.Wafer _data;
     public event Action<Data.Wafer> OnClicked;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         //if (lotIdText == null) Debug.LogError($"{name}: lotIdText is not assigned!", this);
         //if (wfIdText == null) Debug.LogError($"{name}: wfIdText is not assigned!", this);
     }

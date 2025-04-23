@@ -1,88 +1,138 @@
+// NoInkMapView.cs
+// UIComponent 상속, IRecordView 수행, 스크롤뷰 내 클릭/드래그 분리, 3D 레이 캐스트
+
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
+using Data;
 using System;
 
-public class NoInkMapView : MonoBehaviour, IRecordView<Data.NoInkMap>
+public class NoInkMapView : UIComponent,
+    IRecordView<NoInkMap>,
+    IPointerDownHandler,
+    IPointerUpHandler,
+    IDragHandler
 {
     [Header("Primary IDs")]
-    [SerializeField] TMP_Text lotIdText;
-    [SerializeField] TMP_Text wfIdText;
+    [SerializeField] private TMP_Text lotIdText;
+    [SerializeField] private TMP_Text wfIdText;
 
     [Header("Process Info")]
-    [SerializeField] TMP_Text operIdText;
-    [SerializeField] TMP_Text tsvTypeText;
-    [SerializeField] TMP_Text passDieQtyText;
-    [SerializeField] TMP_Text flatZoneTypeText;
+    [SerializeField] private TMP_Text operIdText;
+    [SerializeField] private TMP_Text tsvTypeText;
+    [SerializeField] private TMP_Text passDieQtyText;
+    [SerializeField] private TMP_Text flatZoneTypeText;
 
     [Header("Stack & Position")]
-    [SerializeField] TMP_Text stackNoText;
-    [SerializeField] TMP_Text xAxisText;
-    [SerializeField] TMP_Text yAxisText;
-    [SerializeField] TMP_Text xPosText;
-    [SerializeField] TMP_Text yPosText;
+    [SerializeField] private TMP_Text stackNoText;
+    [SerializeField] private TMP_Text xAxisText;
+    [SerializeField] private TMP_Text yAxisText;
+    [SerializeField] private TMP_Text xPosText;
+    [SerializeField] private TMP_Text yPosText;
 
     [Header("Die Details")]
-    [SerializeField] TMP_Text dieValText;
-    [SerializeField] TMP_Text dieThicknessText;
-    [SerializeField] TMP_Text dieXCoordText;
-    [SerializeField] TMP_Text dieYCoordText;
+    [SerializeField] private TMP_Text dieValText;
+    [SerializeField] private TMP_Text dieThicknessText;
+    [SerializeField] private TMP_Text dieXCoordText;
+    [SerializeField] private TMP_Text dieYCoordText;
 
-    private Data.NoInkMap _data;
-    public event Action<Data.NoInkMap> OnClicked;
+    [Header("Map Interaction")]
+    [Tooltip("RawImage displaying the RenderTexture from the 3D camera")]
+    [SerializeField] private RawImage mapImage;
+    [Tooltip("Camera rendering to the mapImage's RenderTexture")]
+    [SerializeField] private Camera renderCamera;
 
-    void Awake()
+    private NoInkMap _data;
+    public event Action<NoInkMap> OnClicked;
+
+    // 드래그 판정을 위한 필드
+    private bool _isDragging;
+    private Vector2 _pointerDownPos;
+    private const float DragThreshold = 10f;
+
+    /// <summary>
+    /// 데이터로 UI를 바인딩
+    /// </summary>
+    public void Init(NoInkMap data)
     {
-        //if (lotIdText == null) Debug.LogError($"{name}: lotIdText is not assigned!", this);
-        //if (wfIdText == null) Debug.LogError($"{name}: wfIdText is not assigned!", this);
-        //if (operIdText == null) Debug.LogError($"{name}: operIdText is not assigned!", this);
-        //if (tsvTypeText == null) Debug.LogError($"{name}: tsvTypeText is not assigned!", this);
-        //if (passDieQtyText == null) Debug.LogError($"{name}: passDieQtyText is not assigned!", this);
-        //if (flatZoneTypeText == null) Debug.LogError($"{name}: flatZoneTypeText is not assigned!", this);
-        //if (stackNoText == null) Debug.LogError($"{name}: stackNoText is not assigned!", this);
-        //if (xAxisText == null) Debug.LogError($"{name}: xAxisText is not assigned!", this);
-        //if (yAxisText == null) Debug.LogError($"{name}: yAxisText is not assigned!", this);
-        //if (xPosText == null) Debug.LogError($"{name}: xPosText is not assigned!", this);
-        //if (yPosText == null) Debug.LogError($"{name}: yPosText is not assigned!", this);
-        //if (dieValText == null) Debug.LogError($"{name}: dieValText is not assigned!", this);
-        //if (dieThicknessText == null) Debug.LogError($"{name}: dieThicknessText is not assigned!", this);
-        //if (dieXCoordText == null) Debug.LogError($"{name}: dieXCoordText is not assigned!", this);
-        //if (dieYCoordText == null) Debug.LogError($"{name}: dieYCoordText is not assigned!", this);
-    }
-
-    public void Init(Data.NoInkMap data)
-    {
-        if (data == null)
-        {
-            Debug.LogWarning($"{name}: Init called with null data", this);
-            return;
-        }
-
         _data = data;
-
-        if (lotIdText != null) lotIdText.text = data.LOT_ID;
-        if (wfIdText != null) wfIdText.text = data.WF_ID;
-        if (operIdText != null) operIdText.text = data.OPER_ID;
-        if (tsvTypeText != null) tsvTypeText.text = data.TSV_TYPE;
-        if (passDieQtyText != null) passDieQtyText.text = data.PASS_DIE_QTY;
-        if (flatZoneTypeText != null) flatZoneTypeText.text = data.FLAT_ZONE_TYPE;
-        if (stackNoText != null) stackNoText.text = data.STACK_NO;
-        if (xAxisText != null) xAxisText.text = data.X_AXIS;
-        if (yAxisText != null) yAxisText.text = data.Y_AXIS;
-        if (xPosText != null) xPosText.text = data.X_POSITION;
-        if (yPosText != null) yPosText.text = data.Y_POSITION;
-        if (dieValText != null) dieValText.text = data.DIE_VAL;
-        if (dieThicknessText != null) dieThicknessText.text = data.DIE_THICKNESS;
-        if (dieXCoordText != null) dieXCoordText.text = data.DIE_X_COORDINATE;
-        if (dieYCoordText != null) dieYCoordText.text = data.DIE_Y_COORDINATE;
+        lotIdText.text = data.LOT_ID;
+        wfIdText.text = data.WF_ID;
+        operIdText.text = data.OPER_ID;
+        tsvTypeText.text = data.TSV_TYPE;
+        passDieQtyText.text = data.PASS_DIE_QTY;
+        flatZoneTypeText.text = data.FLAT_ZONE_TYPE;
+        stackNoText.text = data.STACK_NO;
+        xAxisText.text = data.X_AXIS;
+        yAxisText.text = data.Y_AXIS;
+        xPosText.text = data.X_POSITION;
+        yPosText.text = data.Y_POSITION;
+        dieValText.text = data.DIE_VAL;
+        dieThicknessText.text = data.DIE_THICKNESS;
+        dieXCoordText.text = data.DIE_X_COORDINATE;
+        dieYCoordText.text = data.DIE_Y_COORDINATE;
     }
 
-    void OnMouseDown()
+    /// <summary>
+    /// 포인터를 다운한 시점에 호출
+    /// 스크롤 vs 클릭 구분을 위해 초기 위치 저장
+    /// </summary>
+    public void OnPointerDown(PointerEventData eventData)
     {
-        if (_data == null)
+        _isDragging = false;
+        _pointerDownPos = eventData.position;
+    }
+
+    /// <summary>
+    /// 드래그 중 호출
+    /// 일정 거리 이상 이동하면 드래그로 간주
+    /// </summary>
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!_isDragging &&
+            Vector2.Distance(eventData.position, _pointerDownPos) > DragThreshold)
         {
-            Debug.LogWarning($"{name}: Click ignored because data is null", this);
-            return;
+            _isDragging = true;
         }
+    }
+
+    /// <summary>
+    /// 포인터를 올린 시점에 호출
+    /// 드래그가 아니라면 클릭으로 처리
+    /// </summary>
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (!_isDragging)
+            HandleClick(eventData);
+    }
+
+    /// <summary>
+    /// 실제 클릭 처리: 맵 상 좌표 → 3D Raycast → 이벤트 호출
+    /// </summary>
+    private void HandleClick(PointerEventData eventData)
+    {
+        if (_data == null || mapImage == null || renderCamera == null)
+            return;
+
+        // RawImage 로컬 좌표 변환
+        RectTransform rt = mapImage.rectTransform;
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            rt, eventData.position, eventData.pressEventCamera, out var localPos))
+            return;
+
+        Rect rect = rt.rect;
+        Vector2 uv = new Vector2(
+            (localPos.x - rect.x) / rect.width,
+            (localPos.y - rect.y) / rect.height
+        );
+
+        Ray ray = renderCamera.ViewportPointToRay(uv);
+        if (Physics.Raycast(ray, out var hit))
+        {
+            Debug.Log($"Raycast hit {hit.collider.name} at {hit.point}");
+        }
+
         OnClicked?.Invoke(_data);
     }
 }

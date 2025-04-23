@@ -1,7 +1,7 @@
 // ItemManager.cs
 // Prefab 및 부모 Transform 참조만 저장하고,
-// 외부에서 데이터 리스트를 받아 화면에 아이템을 생성하는 모듈
-// 클릭 처리 메서드를 빈 메서드로 두어, 원하는 로직을 오버라이드하거나 구현하도록 설계
+// 외부에서 데이터 리스트를 받아 화면에 아이템을 생성하며
+// 선택된 데이터를 프로퍼티에 보관하는 모듈
 
 using UnityEngine;
 using Data;
@@ -21,17 +21,25 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private Transform noInkMapParent;
     [SerializeField] private Transform gradeColorParent;
 
+    /// <summary>선택된 Wafer 데이터</summary>
+    public Wafer SelectedWafer { get; private set; }
+    /// <summary>선택된 StackMap 데이터</summary>
+    public StackMap SelectedStackMap { get; private set; }
+    /// <summary>선택된 NoInkMap 데이터</summary>
+    public NoInkMap SelectedNoInkMap { get; private set; }
+    /// <summary>선택된 GradeColor 데이터</summary>
+    public NoInkMapGradeColor SelectedGradeColor { get; private set; }
+
+    #region Item Spawner 아이템을 생성 
     /// <summary>
-    /// Wafer 리스트를 받아 화면에 WaferView 인스턴스를 생성합니다.
-    /// 클릭 시 OnWaferClicked 메서드를 호출합니다.
+    /// Wafer 리스트를 받아 화면에 WaferView 인스턴스를 생성
+    /// 클릭 시 OnWaferClicked를 호출하여 SelectedWafer에 저장
     /// </summary>
     public void SpawnWafers(List<Wafer> wafers)
     {
-        // 기존 오브젝트 정리
         foreach (Transform child in waferParent)
             Destroy(child.gameObject);
 
-        // 새로 생성
         foreach (var wafer in wafers)
         {
             var go = Instantiate(waferPrefab, waferParent);
@@ -42,8 +50,8 @@ public class ItemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// StackMap 리스트를 받아 화면에 StackMapView 인스턴스를 생성합니다.
-    /// 클릭 시 OnStackMapClicked 메서드를 호출합니다.
+    /// StackMap 리스트를 받아 화면에 StackMapView 인스턴스를 생성
+    /// 클릭 시 OnStackMapClicked를 호출하여 SelectedStackMap에 저장
     /// </summary>
     public void SpawnStackMaps(List<StackMap> maps)
     {
@@ -60,8 +68,8 @@ public class ItemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// NoInkMap 리스트를 받아 화면에 NoInkMapView 인스턴스를 생성합니다.
-    /// 클릭 시 OnNoInkMapClicked 메서드를 호출합니다.
+    /// NoInkMap 리스트를 받아 화면에 NoInkMapView 인스턴스를 생성
+    /// 클릭 시 OnNoInkMapClicked를 호출하여 SelectedNoInkMap에 저장
     /// </summary>
     public void SpawnNoInkMaps(List<NoInkMap> maps)
     {
@@ -78,8 +86,8 @@ public class ItemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// GradeColor 리스트를 받아 화면에 NoInkMapGradeColorView 인스턴스를 생성합니다.
-    /// 클릭 시 OnGradeColorClicked 메서드를 호출합니다.
+    /// GradeColor 리스트를 받아 화면에 NoInkMapGradeColorView 인스턴스를 생성
+    /// 클릭 시 OnGradeColorClicked를 호출하여 SelectedGradeColor에 저장
     /// </summary>
     public void SpawnGradeColors(List<NoInkMapGradeColor> grades)
     {
@@ -94,40 +102,48 @@ public class ItemManager : MonoBehaviour
             view.OnClicked += OnGradeColorClicked;
         }
     }
+    #endregion
 
-    #region 클릭 핸들러 (빈 메서드, 원하는 로직으로 구현 가능)
+    #region 클릭 핸들러 (선택된 데이터를 프로퍼티에 저장)
 
     /// <summary>
     /// WaferView 클릭 시 호출됩니다.
-    /// 다른 로직이 필요하면 이 메서드를 오버라이드하거나 수정하세요.
+    /// SelectedWafer에 저장합니다.
     /// </summary>
     protected virtual void OnWaferClicked(Wafer wafer)
     {
-        // 빈 메서드: 클릭 로직 구현
+        SelectedWafer = wafer;
+        Debug.Log($"SelectedWafer: LOT={wafer.LOT_ID}, WF={wafer.WF_ID}");
     }
 
     /// <summary>
     /// StackMapView 클릭 시 호출됩니다.
+    /// SelectedStackMap에 저장합니다.
     /// </summary>
     protected virtual void OnStackMapClicked(StackMap map)
     {
-        // 빈 메서드: 클릭 로직 구현
+        SelectedStackMap = map;
+        Debug.Log($"SelectedStackMap: LOT={map.LOT_ID}, WF={map.WF_ID}");
     }
 
     /// <summary>
     /// NoInkMapView 클릭 시 호출됩니다.
+    /// SelectedNoInkMap에 저장합니다.
     /// </summary>
     protected virtual void OnNoInkMapClicked(NoInkMap map)
     {
-        // 빈 메서드: 클릭 로직 구현
+        SelectedNoInkMap = map;
+        Debug.Log($"SelectedNoInkMap: LOT={map.LOT_ID}, WF={map.WF_ID}");
     }
 
     /// <summary>
     /// NoInkMapGradeColorView 클릭 시 호출됩니다.
+    /// SelectedGradeColor에 저장합니다.
     /// </summary>
     protected virtual void OnGradeColorClicked(NoInkMapGradeColor grade)
     {
-        // 빈 메서드: 클릭 로직 구현
+        SelectedGradeColor = grade;
+        Debug.Log($"SelectedGradeColor: BIN={grade.BINCHAR}, GRADE={grade.GRADE}");
     }
 
     #endregion
