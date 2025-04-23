@@ -17,6 +17,10 @@ public class NamedPipeManualClient : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private TMP_Text displayText;      // 수신 메시지 표시
 
+    [Header("Item Manager")]
+    [Tooltip("Wafer 생성 요청을 보낼 ItemManager 할당")]
+    [SerializeField] private ItemManager itemManager;
+
     // 내부 상태 및 큐
     private NamedPipeClientStream _pipe;
     private StreamReader _reader;
@@ -108,15 +112,7 @@ public class NamedPipeManualClient : MonoBehaviour
             displayText.text = $"파싱 성공: {parsedData.wafer_list.Count}개";
 
             // 덕영쓰 여기서부터 작업하면됨!
-
-            //try
-            //{
-                
-            //}
-            //catch (Exception ex)
-            //{
-            //    displayText.text = "JSON error: " + ex.Message;
-            //}
+            itemManager.SpawnWafers(parsedData.wafer_list);
         }
     }
 

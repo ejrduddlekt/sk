@@ -8229,7 +8229,7 @@ MonoBehaviour:
   stackMapPrefab: {fileID: 0}
   noInkMapPrefab: {fileID: 0}
   gradeColorPrefab: {fileID: 0}
-  waferParent: {fileID: 3670696130443452828, guid: b22c3b1c5d044cd4298776386d61419e, type: 3}
+  waferParent: {fileID: 442952313}
   stackMapParent: {fileID: 0}
   noInkMapParent: {fileID: 0}
   gradeColorParent: {fileID: 0}
