@@ -6,7 +6,7 @@ namespace Data
     [Serializable]
     public class WaferList
     {
-        public List<Wafer> waferList;
+        public List<Wafer> wafer_list;
     }
 
     [Serializable]
@@ -14,7 +14,7 @@ namespace Data
     {
         public string LOT_ID;
         public string WF_ID;
-        public string PRODUCT_STACK;
+        public string PRODUCT_STATE;
         public string POSITION;
     }
 

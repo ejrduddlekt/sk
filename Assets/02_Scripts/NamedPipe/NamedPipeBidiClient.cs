@@ -13,13 +13,10 @@ public class NamedPipeManualClient : MonoBehaviour
 {
     [Header("Pipe Settings")]
     [SerializeField] private string pipeName = "MyPipe";
+    [SerializeField] private LotsController lotsController;
 
     [Header("UI References")]
-    [SerializeField] private TMP_Text statusText;       // 연결 상태 표시
     [SerializeField] private TMP_Text displayText;      // 수신 메시지 표시
-    [SerializeField] private TMP_InputField inputField; // 전송할 텍스트 입력
-    [SerializeField] private Button sendButton;         // 전송 버튼
-    [SerializeField] private Button connectButton;      // 연결 버튼
 
     // 내부 상태 및 큐
     private NamedPipeClientStream _pipe;
@@ -34,12 +31,7 @@ public class NamedPipeManualClient : MonoBehaviour
     void Awake()
     {
         // 버튼 이벤트
-        connectButton.onClick.AddListener(OnConnectButton);
-        sendButton.onClick.AddListener(OnSendButton);
-
-        // 초기 UI 세팅
-        statusText.text = _statusMessage;
-        sendButton.interactable = false;
+        OnConnectButton();
     }
 
     void OnConnectButton()
@@ -92,39 +84,28 @@ public class NamedPipeManualClient : MonoBehaviour
         if (_connectedFlag)
         {
             _statusMessage = "Connected";
-            sendButton.interactable = true;
             _connectedFlag = false;
         }
 
-        // 2) 상태 메시지 UI 업데이트
-        if (statusText.text != _statusMessage)
-            statusText.text = _statusMessage;
-
-        // 3) 큐에 쌓인 수신 메시지를 displayText에 추가
         while (_incoming.TryDequeue(out var msg))
         {
             displayText.text += msg + "\n";
 
 
-            // Json 파씽 예시
             WaferList parsedData = JsonUtility.FromJson<WaferList>(msg);
-            foreach (var wafer in parsedData.waferList)
-            {
-                Debug.Log($"LOT_ID: {wafer.LOT_ID}, WF_ID: {wafer.WF_ID}, PRODUCT_STACK: {wafer.PRODUCT_STACK}, POSITION: {wafer.POSITION}");
-            }
+            displayText.text = $"파싱 성공: {parsedData.wafer_list.Count}개";
+
+            lotsController.SetLotItems(parsedData.wafer_list);
+
+            //try
+            //{
+                
+            //}
+            //catch (Exception ex)
+            //{
+            //    displayText.text = "JSON error: " + ex.Message;
+            //}
         }
-    }
-
-    private void OnSendButton()
-    {
-        string text = inputField.text.Trim();
-        if (string.IsNullOrEmpty(text) || _writer == null || !_pipe.IsConnected)
-            return;
-
-        _writer.WriteLine(text);
-        inputField.text = "";
-
-        _writer.Flush();
     }
 
     void OnDestroy()
