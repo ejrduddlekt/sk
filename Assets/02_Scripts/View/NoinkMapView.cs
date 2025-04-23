@@ -10,9 +10,7 @@ using System;
 
 public class NoInkMapView : UIComponent,
     IRecordView<NoInkMap>,
-    IPointerDownHandler,
-    IPointerUpHandler,
-    IDragHandler
+    IPointerClickHandler
 {
     [Header("Primary IDs")]
     [SerializeField] private TMP_Text lotIdText;
@@ -43,13 +41,11 @@ public class NoInkMapView : UIComponent,
     [Tooltip("Camera rendering to the mapImage's RenderTexture")]
     [SerializeField] private Camera renderCamera;
 
+    [Header("Chip info")]
+    public GameObject bubleInfo;
+
     private NoInkMap _data;
     public event Action<NoInkMap> OnClicked;
-
-    // 드래그 판정을 위한 필드
-    private bool _isDragging;
-    private Vector2 _pointerDownPos;
-    private const float DragThreshold = 10f;
 
     // 기즈모를 위해 저장할 Ray 및 히트인지 여부
     private Ray _lastRay;
@@ -79,35 +75,16 @@ public class NoInkMapView : UIComponent,
         dieYCoordText.text = data.DIE_Y_COORDINATE;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        _isDragging = false;
-        _pointerDownPos = eventData.position;
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (!_isDragging &&
-            Vector2.Distance(eventData.position, _pointerDownPos) > DragThreshold)
-        {
-            _isDragging = true;
-        }
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        if (!_isDragging)
-            HandleClick(eventData);
-    }
-
     /// <summary>
     /// 클릭 시 클릭 지점을 계산해 3D Raycast를 수행하고, 기즈모로 시각화할 Ray를 저장
+    /// ScrollRect 드래그 이벤트는 그대로 ScrollView가 처리합니다.
     /// </summary>
-    private void HandleClick(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if ( mapImage == null || renderCamera == null)
-            return;
+        //if (_data == null || mapImage == null || renderCamera == null)
+        //    return;
 
+        // RawImage 로컬 좌표 변환
         RectTransform rt = mapImage.rectTransform;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
             rt, eventData.position, eventData.pressEventCamera, out var localPos))
@@ -125,8 +102,11 @@ public class NoInkMapView : UIComponent,
 
         if (Physics.Raycast(ray, out var hit))
         {
+
             _lastHit = hit;
             Debug.Log($"Raycast hit {hit.collider.name} at {hit.point}");
+
+            bubleInfo.transform.position = eventData.position;
         }
 
         OnClicked?.Invoke(_data);
