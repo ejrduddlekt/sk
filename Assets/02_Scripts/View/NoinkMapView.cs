@@ -1,5 +1,5 @@
 // NoInkMapView.cs
-// UIComponent 상속, IRecordView 수행, 스크롤뷰 내 클릭/드래그 분리, 3D 레이 캐스트
+// UIComponent 상속, IRecordView 수행, 스크롤뷰 내 클릭/드래그 분리, 3D 레이 캐스트 및 기즈모 시각화
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,6 +51,11 @@ public class NoInkMapView : UIComponent,
     private Vector2 _pointerDownPos;
     private const float DragThreshold = 10f;
 
+    // 기즈모를 위해 저장할 Ray 및 히트인지 여부
+    private Ray _lastRay;
+    private bool _hasLastRay;
+    private RaycastHit _lastHit;
+
     /// <summary>
     /// 데이터로 UI를 바인딩
     /// </summary>
@@ -74,20 +79,12 @@ public class NoInkMapView : UIComponent,
         dieYCoordText.text = data.DIE_Y_COORDINATE;
     }
 
-    /// <summary>
-    /// 포인터를 다운한 시점에 호출
-    /// 스크롤 vs 클릭 구분을 위해 초기 위치 저장
-    /// </summary>
     public void OnPointerDown(PointerEventData eventData)
     {
         _isDragging = false;
         _pointerDownPos = eventData.position;
     }
 
-    /// <summary>
-    /// 드래그 중 호출
-    /// 일정 거리 이상 이동하면 드래그로 간주
-    /// </summary>
     public void OnDrag(PointerEventData eventData)
     {
         if (!_isDragging &&
@@ -97,10 +94,6 @@ public class NoInkMapView : UIComponent,
         }
     }
 
-    /// <summary>
-    /// 포인터를 올린 시점에 호출
-    /// 드래그가 아니라면 클릭으로 처리
-    /// </summary>
     public void OnPointerUp(PointerEventData eventData)
     {
         if (!_isDragging)
@@ -108,14 +101,13 @@ public class NoInkMapView : UIComponent,
     }
 
     /// <summary>
-    /// 실제 클릭 처리: 맵 상 좌표 → 3D Raycast → 이벤트 호출
+    /// 클릭 시 클릭 지점을 계산해 3D Raycast를 수행하고, 기즈모로 시각화할 Ray를 저장
     /// </summary>
     private void HandleClick(PointerEventData eventData)
     {
-        if (_data == null || mapImage == null || renderCamera == null)
+        if ( mapImage == null || renderCamera == null)
             return;
 
-        // RawImage 로컬 좌표 변환
         RectTransform rt = mapImage.rectTransform;
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
             rt, eventData.position, eventData.pressEventCamera, out var localPos))
@@ -128,11 +120,33 @@ public class NoInkMapView : UIComponent,
         );
 
         Ray ray = renderCamera.ViewportPointToRay(uv);
+        _lastRay = ray;
+        _hasLastRay = true;
+
         if (Physics.Raycast(ray, out var hit))
         {
+            _lastHit = hit;
             Debug.Log($"Raycast hit {hit.collider.name} at {hit.point}");
         }
 
         OnClicked?.Invoke(_data);
+    }
+
+    /// <summary>
+    /// Scene 뷰 및 플레이 중 기즈모로 Ray와 히트 포인트를 시각화
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        if (!_hasLastRay)
+            return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(_lastRay.origin, _lastRay.direction * 100f);
+
+        if (_lastHit.collider != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(_lastHit.point, 0.05f);
+        }
     }
 }
