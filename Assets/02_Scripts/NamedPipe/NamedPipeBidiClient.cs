@@ -61,14 +61,27 @@ public class NamedPipeManualClient : MonoBehaviour
 
             Debug.Log("[Pipe] Connected!");
 
-            // 읽기 루프: WinForms → Unity
+            StringBuilder jsonBuilder = new StringBuilder();
+
             while (_running && _pipe.IsConnected)
             {
-                string line = _reader.ReadLine();
+                string? line = _reader.ReadLine();
                 if (line != null)
-                    _incoming.Enqueue(line);
+                {
+                    if (line.Trim() == "<END>")
+                    {
+                        _incoming.Enqueue(jsonBuilder.ToString());
+                        jsonBuilder.Clear();
+                    }
+                    else
+                    {
+                        jsonBuilder.AppendLine(line);
+                    }
+                }
                 else
+                {
                     Thread.Sleep(5);
+                }
             }
         }
         catch (Exception ex)
@@ -89,7 +102,7 @@ public class NamedPipeManualClient : MonoBehaviour
 
         while (_incoming.TryDequeue(out var msg))
         {
-            displayText.text += msg + "\n";
+            displayText.text = msg;
 
 
             WaferList parsedData = JsonUtility.FromJson<WaferList>(msg);
