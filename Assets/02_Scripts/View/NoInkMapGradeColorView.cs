@@ -5,7 +5,8 @@ using System;
 
 public class NoInkMapGradeColorView : UIComponent, IRecordView<Data.NoInkMapGradeColor>
 {
-    [SerializeField] TMP_Text binCharText, gradeText, passText, remarkText, foreColorText, backColorText;
+    [SerializeField] TMP_Text
+        binCharText, gradeText, passText, remarkText, foreColorText, backColorText;
     private Data.NoInkMapGradeColor _data;
     public event Action<Data.NoInkMapGradeColor> OnClicked;
 
