@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
+using Data;
 
 public class StackMapView : UIComponent, IRecordView<Data.StackMap>
 {
@@ -68,14 +69,32 @@ public class StackMapView : UIComponent, IRecordView<Data.StackMap>
         if (dieXCoordText != null) dieXCoordText.text = data.DIE_X_COORDINATE;
         if (dieYCoordText != null) dieYCoordText.text = data.DIE_Y_COORDINATE;
     }
+    public event Action<StackMapView> OnClickedView;
+    public event Action<StackMapView> OnMouseEnterView;
+    public event Action<StackMapView> OnMouseExitView;
+
+    void OnMouseEnter()
+    {
+        OnMouseEnterView?.Invoke(this);
+    }
+
+    void OnMouseExit()
+    {
+        OnMouseExitView?.Invoke(this);
+    }
 
     void OnMouseDown()
     {
-        if (_data == null)
-        {
-            Debug.LogWarning($"{name}: Click ignored because data is null", this);
-            return;
-        }
-        OnClicked?.Invoke(_data);
+        //if (_data == null)
+        //{
+        //    Debug.LogWarning($"{name}: Click ignored because data is null", this);
+
+        //    return;
+        //}
+        OnClicked?.Invoke(_data);         // 기존 방식 (데이터용)
+        OnClickedView?.Invoke(this);      // View 기준 클릭 이벤트 (데이터 없어도 동작)
+
     }
+
 }
+

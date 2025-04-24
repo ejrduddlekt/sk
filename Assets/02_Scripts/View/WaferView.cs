@@ -25,6 +25,10 @@ public class WaferView : UIComponent, IRecordView<Data.Wafer>
         if (wfIdText != null) wfIdText.text = data.WF_ID;
     }
 
+
+
+
+
     void OnMouseDown()
     {
         if (_data == null) return;

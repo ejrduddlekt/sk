@@ -709,6 +709,7 @@ GameObject:
   - component: {fileID: 170172810}
   - component: {fileID: 170172811}
   - component: {fileID: 170172812}
+  - component: {fileID: 170172813}
   m_Layer: 0
   m_Name: WaferObject
   m_TagString: Untagged
@@ -777,6 +778,29 @@ MonoBehaviour:
   moveSpeed: 2
   minY: -3
   maxY: 6
+--- !u!114 &170172813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170172809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e92960f2268ee0b478af262a25d0c04d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stackMapViews:
+  - {fileID: 1781581799}
+  - {fileID: 449221337}
+  - {fileID: 1438504287}
+  - {fileID: 836910821}
+  - {fileID: 1770201283}
+  - {fileID: 1023310149}
+  - {fileID: 780752469}
+  highlightColor: {r: 0.06757209, g: 1, b: 0.015686274, a: 1}
+  highlightWidth: 10
+  noInkMapView: {fileID: 268228964}
 --- !u!1 &192805545
 GameObject:
   m_ObjectHideFlags: 0
