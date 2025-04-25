@@ -4,6 +4,13 @@ using System.Collections.Generic;
 namespace Data
 {
     [Serializable]
+    public class CommandWrapper<T>
+    {
+        public string command;
+        public T payload;
+    }
+
+    [Serializable]
     public class WaferList { public List<Wafer> wafer_list; }
     [Serializable]
     public class Wafer { public string LOT_ID; public string WF_ID; public string PRODUCT_STATE; public string POSITION; }

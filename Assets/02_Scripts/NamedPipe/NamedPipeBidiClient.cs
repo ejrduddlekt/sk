@@ -103,16 +103,38 @@ public class NamedPipeManualClient : MonoBehaviour
             _connectedFlag = false;
         }
 
+        Recv();
+    }
+
+    private void Recv()
+    {
         while (_incoming.TryDequeue(out var msg))
         {
             displayText.text = msg;
 
+            if (msg.Contains("wafer_list"))
+            {
+                WaferList parsedData = JsonUtility.FromJson<WaferList>(msg);
+                displayText.text = $"파싱 성공: {parsedData.wafer_list.Count}개";
 
-            WaferList parsedData = JsonUtility.FromJson<WaferList>(msg);
-            displayText.text = $"파싱 성공: {parsedData.wafer_list.Count}개";
+                // 덕영쓰 여기서부터 작업하면됨!
+                itemManager.SpawnWafers(parsedData.wafer_list);
+            }
+        }
+    }
 
-            // 덕영쓰 여기서부터 작업하면됨!
-            itemManager.SpawnWafers(parsedData.wafer_list);
+    public void Send(string message)
+    {
+        if (_writer == null || !_pipe.IsConnected) return;
+
+        try
+        {
+            _writer.WriteLine(message);
+            _writer.Flush();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Pipe] Send failed: {ex.Message}");
         }
     }
 

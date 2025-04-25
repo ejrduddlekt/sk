@@ -6,6 +6,7 @@
 using UnityEngine;
 using Data;
 using System.Collections.Generic;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ItemManager : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private Transform stackMapParent;
     [SerializeField] private Transform noInkMapParent;
     [SerializeField] private Transform gradeColorParent;
+
+    [Header("Parents")]
+    [SerializeField] private NamedPipeManualClient namedPipe;
 
     /// <summary>선택된 Wafer 데이터</summary>
     public Wafer SelectedWafer { get; private set; }
@@ -104,6 +108,17 @@ public class ItemManager : MonoBehaviour
     }
     #endregion
 
+    private CommandWrapper<T> CommandWrapping<T>(string commend, T instance)
+    {
+        CommandWrapper<T> wrapper = new CommandWrapper<T>
+        {
+            command = commend,
+            payload = instance,
+        };
+
+        return wrapper;
+    }
+
     #region 클릭 핸들러 (선택된 데이터를 프로퍼티에 저장)
 
     /// <summary>
@@ -114,6 +129,10 @@ public class ItemManager : MonoBehaviour
     {
         SelectedWafer = wafer;
         Debug.Log($"SelectedWafer: LOT={wafer.LOT_ID}, WF={wafer.WF_ID}");
+
+        var wrapper = CommandWrapping<Wafer>("GetStackMap", wafer);
+        string json = JsonUtility.ToJson(wrapper, false);
+        namedPipe.Send(json);
     }
 
     /// <summary>
