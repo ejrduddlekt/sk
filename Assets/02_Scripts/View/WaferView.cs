@@ -2,8 +2,9 @@
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.EventSystems;
 
-public class WaferView : UIComponent, IRecordView<Data.Wafer>
+public class WaferView : UIComponent, IRecordView<Data.Wafer>, IPointerClickHandler
 {
     [SerializeField] TMP_Text lotIdText;
     [SerializeField] TMP_Text wfIdText;
@@ -25,13 +26,17 @@ public class WaferView : UIComponent, IRecordView<Data.Wafer>
         if (wfIdText != null) wfIdText.text = data.WF_ID;
     }
 
+    // 3D Object Clickw 처리용
+    //void OnMouseDown()
+    //{
+    //    if (_data == null) return;
+    //    OnClicked?.Invoke(_data);
+    //}
 
-
-
-
-    void OnMouseDown()
+    // UI 클릭 이벤트 처리용
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (_data == null) return;
-        OnClicked?.Invoke(_data);
+        if (_data != null)
+            OnClicked?.Invoke(_data);
     }
 }
