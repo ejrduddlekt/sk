@@ -1,0 +1,58 @@
+{
+  "wafer_list": [
+    {
+      "LOT_ID": "LOT_ID",
+      "WF_ID": "WF_ID.12",
+      "PRODUCT_STATE": "PRODUCT_STATE",
+      "POSITION": "12"
+    },
+    {
+      "LOT_ID": "LOT_ID",
+      "WF_ID": "WF_ID.13",
+      "PRODUCT_STATE": "PRODUCT_STATE",
+      "POSITION": "13"
+    },
+    {
+      "LOT_ID": "LOT_ID",
+      "WF_ID": "WF_ID.14",
+      "PRODUCT_STATE": "PRODUCT_STATE",
+      "POSITION": "14"
+    },
+    {
+      "LOT_ID": "LOT_ID",
+      "WF_ID": "WF_ID.15",
+      "PRODUCT_STATE": "PRODUCT_STATE",
+      "POSITION": "15"
+    },
+    {
+      "LOT_ID": "LOT_ID",
+      "WF_ID": "WF_ID.16",
+      "PRODUCT_STATE": "PRODUCT_STATE",
+      "POSITION": "16"
+    },
+    {
+      "LOT_ID": "LOT_ID",
+      "WF_ID": "WF_ID.17",
+      "PRODUCT_STATE": "PRODUCT_STATE",
+      "POSITION": "17"
+    },
+    {
+      "LOT_ID": "LOT_ID",
+      "WF_ID": "WF_ID.18",
+      "PRODUCT_STATE": "PRODUCT_STATE",
+      "POSITION": "18"
+    },
+    {
+      "LOT_ID": "LOT_ID",
+      "WF_ID": "WF_ID.19",
+      "PRODUCT_STATE": "PRODUCT_STATE",
+      "POSITION": "19"
+    },
+    {
+      "LOT_ID": "LOT_ID",
+      "WF_ID": "WF_ID.20",
+      "PRODUCT_STATE": "PRODUCT_STATE",
+      "POSITION": "20"
+    }
+  ]
+}

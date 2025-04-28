@@ -117,9 +117,26 @@ public class NamedPipeManualClient : MonoBehaviour
                 WaferList parsedData = JsonUtility.FromJson<WaferList>(msg);
                 displayText.text = $"파싱 성공: {parsedData.wafer_list.Count}개";
 
-                // 덕영쓰 여기서부터 작업하면됨!
                 itemManager.SpawnWafers(parsedData.wafer_list);
             }
+
+            if (msg.Contains("stackmap_list"))
+            {
+                StackMapList parsedData = JsonUtility.FromJson<StackMapList>(msg);
+                displayText.text = $"파싱 성공: {parsedData.stackmap_list.Count}개";
+
+                // 덕영쓰 여기서부터 작업하면됨!
+            }
+
+            if (msg.Contains("noinkmap_list"))
+            {
+                NoInkMapList parsedData = JsonUtility.FromJson<NoInkMapList>(msg);
+                displayText.text = $"파싱 성공: {parsedData.noinkmap_list.Count}개";
+
+                // 덕영쓰 여기서부터 작업하면됨!
+            }
+
+            //TODO : 차후 넘어오는 데이터를 분기처리로 받아서 파씽하면됨
         }
     }
 
