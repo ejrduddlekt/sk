@@ -28,6 +28,20 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
     /// <summary>줌 변경 시 호출되는 이벤트</summary>
     public event Action<float> OnZoomChanged;
 
+    // 확대 축소 - 마우스 휠
+    private float finalZoomFactor = 0;
+    private float scrollScale = 10f;
+    private float zoomFactorMin = -10;
+    private float zoomFactorMax = 10;
+    private float quadFuncA, quadFuncB, quadFuncC;
+
+    // 회전 - 마우스 우측버튼
+    private bool draggingForRotate = false;
+    private Vector3 posClick;
+    private float rotateX = 0f;
+    private float rotateY = 0f;
+    private float dragX, dragY;
+
     // 확대/축소를 적용할 대상 Transform (UI면 RectTransform, 3D면 Transform)
     [Tooltip("확대/축소를 적용할 대상 Transform. 비어있으면 이 GameObject의 transform 사용")]
     [SerializeField] private Transform targetTransform;
@@ -43,6 +57,12 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
             zoomInButton.onClick.AddListener(ZoomIn);
         if (zoomOutButton != null)
             zoomOutButton.onClick.AddListener(ZoomOut);
+
+        // calculate quadratic function coefficient
+        float temp = (zoomFactorMax);
+        quadFuncA = (maxZoom + minZoom - 2.0f) / (2.0f * temp * temp);
+        quadFuncB = (maxZoom - minZoom) / (2.0f * temp);
+        quadFuncC = 1.0f;
     }
 
     /// <summary>
@@ -74,7 +94,13 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
     /// </summary>
     private void ChangeZoom(float delta)
     {
-        float newZoom = Mathf.Clamp(Zoom + delta, minZoom, maxZoom);
+        float newZoom = Zoom + delta;
+        SetZoom(newZoom);
+    }
+
+    private void SetZoom(float newZoom)
+    {
+        newZoom = Mathf.Clamp(newZoom, minZoom, maxZoom);
         if (!Mathf.Approximately(newZoom, Zoom))
         {
             Zoom = newZoom;
@@ -94,5 +120,51 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
     {
         if (targetTransform != null)
             targetTransform.localScale = Vector3.one * Zoom;
+    }
+
+    void Update()
+    {
+        if (targetTransform != null)
+        {
+            // 줌 인/아웃
+            float deltaScroll = Input.GetAxisRaw("Mouse ScrollWheel") * scrollScale;
+            if (deltaScroll != 0)
+            {
+                // apply zoom in/out factor
+                finalZoomFactor = Mathf.Round(finalZoomFactor + deltaScroll);
+                finalZoomFactor = Mathf.Clamp(finalZoomFactor, zoomFactorMin, zoomFactorMax);
+                Debug.Log("final = " + finalZoomFactor + " delta = " + deltaScroll);
+
+                float newZoom = quadFuncA * finalZoomFactor * finalZoomFactor + quadFuncB * finalZoomFactor + quadFuncC;
+                SetZoom(newZoom);
+            }
+
+            // 회전
+            if (Input.GetMouseButtonDown(0))
+            {
+                draggingForRotate = true;
+                posClick = Input.mousePosition;
+                dragX = dragY = 0;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                draggingForRotate = false;
+                rotateX = rotateX + dragX;
+                rotateY = rotateY - dragY;
+            }
+            if (draggingForRotate)
+            {
+                // calculate rotate-x from diff between posClick & curPos
+                Vector3 diff = Input.mousePosition - posClick;
+                float rotY = 360.0f * diff.x / Screen.width;
+                float rotX = 360.0f * diff.y / Screen.height;
+
+                dragX = rotX;
+                dragY = rotY;
+                Quaternion rot = Quaternion.AngleAxis(rotateY - dragY, Vector3.up);
+                rot = Quaternion.AngleAxis(rotateX + dragX, Camera.main.transform.right) * rot;
+                targetTransform.rotation = rot;
+            }
+        }
     }
 }
