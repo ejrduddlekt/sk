@@ -38,16 +38,16 @@ public class ItemManager : MonoBehaviour
     /// Wafer 리스트를 받아 화면에 WaferView 인스턴스를 생성
     /// 클릭 시 OnWaferClicked를 호출하여 SelectedWafer에 저장
     /// </summary>
-    public void SpawnWafers(List<Wafer> wafers)
+    public void SpawnLots(List<Wafer> items)
     {
         foreach (Transform child in waferParent)
             Destroy(child.gameObject);
 
-        foreach (var wafer in wafers)
+        foreach (var item in items)
         {
             var go = Instantiate(waferPrefab, waferParent);
             var view = go.GetComponent<WaferView>();
-            view.Init(wafer);
+            view.Init(item);
             view.OnClicked += OnWaferClicked;
         }
     }
@@ -56,16 +56,16 @@ public class ItemManager : MonoBehaviour
     /// StackMap 리스트를 받아 화면에 StackMapView 인스턴스를 생성
     /// 클릭 시 OnStackMapClicked를 호출하여 SelectedStackMap에 저장
     /// </summary>
-    public void SpawnStackMaps(List<StackMap> maps)
+    public void SpawnStackMapList(List<StackMap> items)
     {
         foreach (Transform child in stackMapParent)
             Destroy(child.gameObject);
 
-        foreach (var map in maps)
+        foreach (var item in items)
         {
             var go = Instantiate(stackMapPrefab, stackMapParent);
             var view = go.GetComponent<StackMapView>();
-            view.Init(map);
+            view.Init(item);
             view.OnClicked += OnStackMapClicked;
         }
     }
@@ -74,16 +74,16 @@ public class ItemManager : MonoBehaviour
     /// NoInkMap 리스트를 받아 화면에 NoInkMapView 인스턴스를 생성
     /// 클릭 시 OnNoInkMapClicked를 호출하여 SelectedNoInkMap에 저장
     /// </summary>
-    public void SpawnNoInkMaps(List<NoInkMap> maps)
+    public void SpawnNoInkMaps(List<NoInkMap> items)
     {
         foreach (Transform child in noInkMapParent)
             Destroy(child.gameObject);
 
-        foreach (var map in maps)
+        foreach (var item in items)
         {
             var go = Instantiate(noInkMapPrefab, noInkMapParent);
             var view = go.GetComponent<NoInkMapView>();
-            view.Init(map);
+            view.Init(item);
             view.OnClicked += OnNoInkMapClicked;
         }
     }

@@ -31,6 +31,9 @@ public class NamedPipeManualClient : MonoBehaviour
     private string _statusMessage = "Disconnected";
     private ConcurrentQueue<string> _incoming = new ConcurrentQueue<string>();
 
+    // 데이터 (추후 다른 클래스로 이동해야 함)
+    [SerializeField] private StackMapListData stackMapListData;
+
     void Awake()
     {
         // 버튼 이벤트
@@ -117,15 +120,16 @@ public class NamedPipeManualClient : MonoBehaviour
                 WaferList parsedData = JsonUtility.FromJson<WaferList>(msg);
                 displayText.text = $"파싱 성공: {parsedData.wafer_list.Count}개";
 
-                itemManager.SpawnWafers(parsedData.wafer_list);
+                itemManager.SpawnLots(parsedData.wafer_list);
             }
 
             if (msg.Contains("stackmap_list"))
             {
-                StackMapList parsedData = JsonUtility.FromJson<StackMapList>(msg);
-                displayText.text = $"파싱 성공: {parsedData.stackmap_list.Count}개";
-
-                // 덕영쓰 여기서부터 작업하면됨!
+                var parsedData = JsonUtility.FromJson<StackMapList>(msg);
+                stackMapListData.SetData(parsedData);
+                // 이후 stackMapListData.FloorDict로 빠른 조회 가능
+                displayText.text = $"파싱 및 로드 완료: {parsedData.stackmap_list.Count}개";
+                itemManager.SpawnStackMapList(parsedData.stackmap_list);
             }
 
             if (msg.Contains("noinkmap_list"))
