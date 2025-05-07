@@ -140,15 +140,17 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
             }
 
             // 회전
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(1))
             {
                 draggingForRotate = true;
+                GameManager.Instance.isDragModeActive = true;
                 posClick = Input.mousePosition;
                 dragX = dragY = 0;
             }
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(1))
             {
                 draggingForRotate = false;
+                GameManager.Instance.isDragModeActive = false;
                 rotateX = rotateX + dragX;
                 rotateY = rotateY - dragY;
             }

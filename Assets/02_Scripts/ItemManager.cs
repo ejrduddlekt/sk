@@ -62,13 +62,14 @@ public class ItemManager : MonoBehaviour
         foreach (Transform child in stackMapLayerParent)
             Destroy(child.gameObject);
         StackMapHandler controller = stackMapLayerParent.GetComponent<StackMapHandler>();
+        controller.stackMapViews.Clear();
 
         foreach (var item in DataStorage.Instance.stackMapList.stackmap_list)
         {
             var go = Instantiate(stackMapLayerPrefab, stackMapLayerParent);
-            var view = go.GetComponent<StackMapLayerView>();
-            controller.stackMapViews.Add(view);
-            view.Init(item);
+            var view = go.GetComponentInChildren<StackMapLayerView>();
+            controller.SetStackMapViews(view, item);
+
             view.OnClicked += OnStackMapClicked;
         }
     }

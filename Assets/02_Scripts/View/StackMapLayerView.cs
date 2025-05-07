@@ -30,7 +30,7 @@ public class StackMapLayerView : MonoBehaviour, IRecordView<Data.StackMap>
         if (wfIdText != null) wfIdText.text = data.WF_ID;
         if (stackNoText != null) stackNoText.text = data.STACK_NO;
     }
-    public event Action<StackMapLayerView> OnClickedView;
+
     public event Action<StackMapLayerView> OnMouseEnterView;
     public event Action<StackMapLayerView> OnMouseExitView;
 
@@ -47,8 +47,6 @@ public class StackMapLayerView : MonoBehaviour, IRecordView<Data.StackMap>
     void OnMouseDown()
     {
         OnClicked?.Invoke(_data);         // 기존 방식 (데이터용)
-        OnClickedView?.Invoke(this);      // View 기준 클릭 이벤트 (데이터 없어도 동작)
     }
-
 }
 
