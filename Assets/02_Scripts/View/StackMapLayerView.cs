@@ -14,6 +14,7 @@ public class StackMapLayerView : MonoBehaviour, IRecordView<Data.StackMap>
 
     private Data.StackMap _data;
     public event Action<Data.StackMap> OnClicked;
+    private StackMapMover mover;
 
     public void Init(Data.StackMap data)
     {

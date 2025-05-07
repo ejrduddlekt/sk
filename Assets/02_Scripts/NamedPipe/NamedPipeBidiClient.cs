@@ -132,7 +132,7 @@ public class NamedPipeManualClient : MonoBehaviour
 
                 // 이후 stackMapListData.FloorDict로 빠른 조회 가능
                 displayText.text = $"파싱 및 로드 완료: {parsedData.stackmap_list.Count}개";
-                //itemManager.SpawnStackMapLayer();
+                itemManager.SpawnStackMapLayer();
             }
 
             if (msg.Contains("noinkmap_list"))
