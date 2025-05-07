@@ -11,7 +11,7 @@ using DG.Tweening;
 public class StackMapHandler : MonoBehaviour
 {
     [Header("스택맵 목록")]
-    [SerializeField] private List<StackMapView> stackMapViews;
+    [SerializeField] private List<StackMapLayerView> stackMapViews;
 
     [Header("이동 설정")]
     [Tooltip("마우스 오버 시 로컬 X축으로 이동할 거리 (유니티 단위)")]
@@ -29,8 +29,8 @@ public class StackMapHandler : MonoBehaviour
     [SerializeField] private NoInkMapView noInkMapView;
 
     // 로컬 위치 저장
-    private Dictionary<StackMapView, Vector3> originalLocalPositions = new Dictionary<StackMapView, Vector3>();
-    private StackMapView currentHighlighted;
+    private Dictionary<StackMapLayerView, Vector3> originalLocalPositions = new Dictionary<StackMapLayerView, Vector3>();
+    private StackMapLayerView currentHighlighted;
 
     void Awake()
     {
@@ -47,7 +47,7 @@ public class StackMapHandler : MonoBehaviour
         }
     }
 
-    private void OnViewEnter(StackMapView view)
+    private void OnViewEnter(StackMapLayerView view)
     {
         if (noInkMapView != null && noInkMapView.gameObject.activeSelf)
             return;
@@ -71,7 +71,7 @@ public class StackMapHandler : MonoBehaviour
         }
     }
 
-    private void OnViewExit(StackMapView view)
+    private void OnViewExit(StackMapLayerView view)
     {
         if (noInkMapView != null && noInkMapView.gameObject.activeSelf)
             return;
@@ -90,7 +90,7 @@ public class StackMapHandler : MonoBehaviour
         }
     }
 
-    private void OnViewClicked(StackMapView clickedView)
+    private void OnViewClicked(StackMapLayerView clickedView)
     {
         if (noInkMapView != null && noInkMapView.gameObject.activeSelf)
             return;

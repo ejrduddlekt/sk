@@ -8,6 +8,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Data;
+using System.Collections.Generic;
 
 public class NamedPipeManualClient : MonoBehaviour
 {
@@ -30,9 +31,6 @@ public class NamedPipeManualClient : MonoBehaviour
     private bool _connectedFlag;
     private string _statusMessage = "Disconnected";
     private ConcurrentQueue<string> _incoming = new ConcurrentQueue<string>();
-
-    // 데이터 (추후 다른 클래스로 이동해야 함)
-    [SerializeField] private StackMapListData stackMapListData;
 
     void Awake()
     {
@@ -117,19 +115,24 @@ public class NamedPipeManualClient : MonoBehaviour
 
             if (msg.Contains("wafer_list"))
             {
-                WaferList parsedData = JsonUtility.FromJson<WaferList>(msg);
+                LotsList parsedData = JsonUtility.FromJson<LotsList>(msg);
                 displayText.text = $"파싱 성공: {parsedData.wafer_list.Count}개";
 
-                itemManager.SpawnLots(parsedData.wafer_list);
+                DataStorage.Instance.SetLots(parsedData);
+                itemManager.SpawnLots();
             }
 
             if (msg.Contains("stackmap_list"))
             {
-                var parsedData = JsonUtility.FromJson<StackMapList>(msg);
-                stackMapListData.SetData(parsedData);
+                // 1) RawStackMapList로 파싱
+                var parsedData = JsonUtility.FromJson<RawStackMapList>(msg);
+
+                // 2) 가공된 데이터로 나누기
+                DataStorage.Instance.SetStackMap(parsedData);
+
                 // 이후 stackMapListData.FloorDict로 빠른 조회 가능
                 displayText.text = $"파싱 및 로드 완료: {parsedData.stackmap_list.Count}개";
-                itemManager.SpawnStackMapList(parsedData.stackmap_list);
+                //itemManager.SpawnStackMapLayer();
             }
 
             if (msg.Contains("noinkmap_list"))
@@ -171,3 +174,5 @@ public class NamedPipeManualClient : MonoBehaviour
         _pipe?.Close();
     }
 }
+
+

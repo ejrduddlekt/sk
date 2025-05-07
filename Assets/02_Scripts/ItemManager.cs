@@ -10,14 +10,15 @@ using System.Collections.Generic;
 public class ItemManager : MonoBehaviour
 {
     [Header("Prefabs")]
-    [SerializeField] private GameObject waferPrefab;
+    [SerializeField] private GameObject lotsPrefab;
+    [SerializeField] private GameObject stackMapLayerPrefab;
     [SerializeField] private GameObject stackMapPrefab;
     [SerializeField] private GameObject noInkMapPrefab;
     [SerializeField] private GameObject gradeColorPrefab;
 
     [Header("Parents")]
-    [SerializeField] private Transform waferParent;
-    [SerializeField] private Transform stackMapParent;
+    [SerializeField] private Transform lotsParent;
+    [SerializeField] private Transform stackMapLayerParent;
     [SerializeField] private Transform noInkMapParent;
     [SerializeField] private Transform gradeColorParent;
 
@@ -25,7 +26,7 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private NamedPipeManualClient namedPipe;
 
     /// <summary>선택된 Wafer 데이터</summary>
-    public Wafer SelectedWafer { get; private set; }
+    public Lots SelectedWafer { get; private set; }
     /// <summary>선택된 StackMap 데이터</summary>
     public StackMap SelectedStackMap { get; private set; }
     /// <summary>선택된 NoInkMap 데이터</summary>
@@ -38,14 +39,14 @@ public class ItemManager : MonoBehaviour
     /// Wafer 리스트를 받아 화면에 WaferView 인스턴스를 생성
     /// 클릭 시 OnWaferClicked를 호출하여 SelectedWafer에 저장
     /// </summary>
-    public void SpawnLots(List<Wafer> items)
+    public void SpawnLots()
     {
-        foreach (Transform child in waferParent)
+        foreach (Transform child in lotsParent)
             Destroy(child.gameObject);
 
-        foreach (var item in items)
+        foreach (var item in DataStorage.Instance.lotsList.wafer_list)
         {
-            var go = Instantiate(waferPrefab, waferParent);
+            var go = Instantiate(lotsPrefab, lotsParent);
             var view = go.GetComponent<WaferView>();
             view.Init(item);
             view.OnClicked += OnWaferClicked;
@@ -56,15 +57,15 @@ public class ItemManager : MonoBehaviour
     /// StackMap 리스트를 받아 화면에 StackMapView 인스턴스를 생성
     /// 클릭 시 OnStackMapClicked를 호출하여 SelectedStackMap에 저장
     /// </summary>
-    public void SpawnStackMapList(List<StackMap> items)
+    public void SpawnStackMapLayer()
     {
-        foreach (Transform child in stackMapParent)
+        foreach (Transform child in stackMapLayerParent)
             Destroy(child.gameObject);
 
-        foreach (var item in items)
+        foreach (var item in DataStorage.Instance.stackMapList.stackmap_list)
         {
-            var go = Instantiate(stackMapPrefab, stackMapParent);
-            var view = go.GetComponent<StackMapView>();
+            var go = Instantiate(stackMapLayerPrefab, stackMapLayerParent);
+            var view = go.GetComponent<StackMapLayerView>();
             view.Init(item);
             view.OnClicked += OnStackMapClicked;
         }
@@ -124,12 +125,12 @@ public class ItemManager : MonoBehaviour
     /// WaferView 클릭 시 호출됩니다.
     /// SelectedWafer에 저장합니다.
     /// </summary>
-    protected virtual void OnWaferClicked(Wafer wafer)
+    protected virtual void OnWaferClicked(Lots wafer)
     {
         SelectedWafer = wafer;
         Debug.Log($"SelectedWafer: LOT={wafer.LOT_ID}, WF={wafer.WF_ID}");
 
-        var wrapper = CommandWrapping<Wafer>("GetStackMap", wafer);
+        var wrapper = CommandWrapping<Lots>("GetStackMap", wafer);
         string json = JsonUtility.ToJson(wrapper, false);
         namedPipe.Send(json);
     }

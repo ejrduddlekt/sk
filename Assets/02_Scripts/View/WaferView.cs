@@ -4,12 +4,12 @@ using TMPro;
 using System;
 using UnityEngine.EventSystems;
 
-public class WaferView : UIComponent, IRecordView<Data.Wafer>, IPointerClickHandler
+public class WaferView : UIComponent, IRecordView<Data.Lots>, IPointerClickHandler
 {
     [SerializeField] TMP_Text lotIdText;
     [SerializeField] TMP_Text wfIdText;
-    private Data.Wafer _data;
-    public event Action<Data.Wafer> OnClicked;
+    private Data.Lots _data;
+    public event Action<Data.Lots> OnClicked;
 
     protected override void Awake()
     {
@@ -18,7 +18,7 @@ public class WaferView : UIComponent, IRecordView<Data.Wafer>, IPointerClickHand
         //if (wfIdText == null) Debug.LogError($"{name}: wfIdText is not assigned!", this);
     }
 
-    public void Init(Data.Wafer data)
+    public void Init(Data.Lots data)
     {
         if (data == null) return;
         _data = data;
