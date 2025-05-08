@@ -1,7 +1,8 @@
 using UnityEngine;
 using System;
+using VInspector;
 
-public enum SelectionStage { None, Wafer, StackMapLayer, Chip, NoInkMap }
+public enum SelectionStage { None, SelectLots, SelectStackMapLayer, SelectChip, SelectNoInkMap }
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -10,7 +11,8 @@ public class GameManager : MonoBehaviour
 
     public event Action<SelectionStage> OnStageChanged;
 
-    private SelectionStage _currentStage = SelectionStage.None;
+    [ShowInInspector]
+    private SelectionStage _currentStage = SelectionStage.SelectStackMapLayer;
     public SelectionStage CurrentStage
     {
         get => _currentStage;
@@ -31,6 +33,6 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
         //DontDestroyOnLoad(gameObject);
-        _currentStage = SelectionStage.StackMapLayer;
+        _currentStage = SelectionStage.SelectStackMapLayer;
     }
 }

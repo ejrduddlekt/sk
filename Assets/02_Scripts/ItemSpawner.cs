@@ -7,15 +7,8 @@ using UnityEngine;
 using Data;
 using System.Collections.Generic;
 
-public class ItemManager : MonoBehaviour
+public class ItemSpawner : MonoBehaviour
 {
-    [Header("Prefabs")]
-    [SerializeField] private GameObject lotsPrefab;
-    [SerializeField] private GameObject stackMapLayerPrefab;
-    [SerializeField] private GameObject stackMapPrefab;
-    [SerializeField] private GameObject noInkMapPrefab;
-    [SerializeField] private GameObject gradeColorPrefab;
-
     [Header("Parents")]
     [SerializeField] private Transform lotsParent;
     [SerializeField] private Transform stackMapLayerParent;
@@ -44,9 +37,9 @@ public class ItemManager : MonoBehaviour
         foreach (Transform child in lotsParent)
             Destroy(child.gameObject);
 
-        foreach (var item in DataStorage.Instance.lotsList.wafer_list)
+        foreach (var item in DataManager.Instance.dataStorage.lotsList.wafer_list)
         {
-            var go = Instantiate(lotsPrefab, lotsParent);
+            var go = Instantiate(DataManager.Instance.itemStorage.lotsPrefab, lotsParent);
             var view = go.GetComponent<WaferView>();
             view.Init(item);
             view.OnClicked += OnWaferClicked;
@@ -64,9 +57,9 @@ public class ItemManager : MonoBehaviour
         StackMapHandler controller = stackMapLayerParent.GetComponent<StackMapHandler>();
         controller.stackMapViews.Clear();
 
-        foreach (var item in DataStorage.Instance.stackMapList.stackmap_list)
+        foreach (var item in DataManager.Instance.dataStorage.stackMapList.stackmap_list)
         {
-            var go = Instantiate(stackMapLayerPrefab, stackMapLayerParent);
+            var go = Instantiate(DataManager.Instance.itemStorage.stackMapLayerPrefab, stackMapLayerParent);
             var view = go.GetComponentInChildren<StackMapLayerView>();
             controller.SetStackMapViews(view, item);
 
@@ -85,7 +78,7 @@ public class ItemManager : MonoBehaviour
 
         foreach (var item in items)
         {
-            var go = Instantiate(noInkMapPrefab, noInkMapParent);
+            var go = Instantiate(DataManager.Instance.itemStorage.noInkMapPrefab, noInkMapParent);
             var view = go.GetComponent<NoInkMapView>();
             view.Init(item);
             view.OnClicked += OnNoInkMapClicked;
@@ -103,7 +96,7 @@ public class ItemManager : MonoBehaviour
 
         foreach (var grade in grades)
         {
-            var go = Instantiate(gradeColorPrefab, gradeColorParent);
+            var go = Instantiate(DataManager.Instance.itemStorage.gradeColorPrefab, gradeColorParent);
             var view = go.GetComponent<NoInkMapGradeColorView>();
             view.Init(grade);
             view.OnClicked += OnGradeColorClicked;
@@ -145,6 +138,7 @@ public class ItemManager : MonoBehaviour
     protected virtual void OnStackMapClicked(StackMap map)
     {
         SelectedStackMap = map;
+        GameManager.Instance.CurrentStage = SelectionStage.SelectChip;
         Debug.Log($"SelectedStackMap: LOT={map.LOT_ID}, WF={map.WF_ID}");
     }
 

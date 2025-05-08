@@ -19,6 +19,10 @@ public class StackMapMover : MonoBehaviour
 
     private bool _isSelect = false;
 
+    private bool StageActive =>
+    GameManager.Instance != null &&
+    GameManager.Instance.CurrentStage == SelectionStage.SelectStackMapLayer;
+
     /// <summary>
     /// 선택 여부에 따라 회전 및 이동
     /// </summary>
@@ -83,32 +87,34 @@ public class StackMapMover : MonoBehaviour
 
     public void MoveRight()
     {
-        if (moveTarget == null) return;
+        if (moveTarget == null || !StageActive) return;
 
         moveTarget.DOKill();
         moveTarget.DOLocalMove(Vector3.right * hoverDistance, moveDuration)
                   .SetEase(moveEase);
+        HighlightOn();
     }
 
     public void MoveBack()
     {
-        if (moveTarget == null) return;
+        if (moveTarget == null || !StageActive) return;
 
         moveTarget.DOKill();
         moveTarget.DOLocalMove(Vector3.zero, moveDuration)
                   .SetEase(moveEase);
+        HighlightOff();
     }
 
     public void ResetRotation()
     {
-        if (moveTarget == null) return;
+        if (moveTarget == null || !StageActive) return;
 
         moveTarget.DORotateQuaternion(originalRotation, moveDuration).SetEase(moveEase);
     }
 
     public void HighlightOn()
     {
-        if (outline == null) return;
+        if (outline == null || !StageActive) return;
         outline.OutlineColor = highlightColor;
         outline.OutlineWidth = highlightWidth;
         outline.OutlineMode = Outline.Mode.OutlineAll;
@@ -117,13 +123,13 @@ public class StackMapMover : MonoBehaviour
 
     public void HighlightOff()
     {
-        if (outline == null) return;
+        if (outline == null || !StageActive) return;
         outline.enabled = false;
     }
 
     private void OnMouseEnter()
     {
-        if (handler != null)
+        if (handler != null || !StageActive)
             handler.CurrentHighlighted = this;
     }
 }

@@ -20,7 +20,7 @@ public class NamedPipeManualClient : MonoBehaviour
 
     [Header("Item Manager")]
     [Tooltip("Wafer 생성 요청을 보낼 ItemManager 할당")]
-    [SerializeField] private ItemManager itemManager;
+    [SerializeField] private ItemSpawner itemManager;
 
     // 내부 상태 및 큐
     private NamedPipeClientStream _pipe;
@@ -118,7 +118,7 @@ public class NamedPipeManualClient : MonoBehaviour
                 LotsList parsedData = JsonUtility.FromJson<LotsList>(msg);
                 displayText.text = $"파싱 성공: {parsedData.wafer_list.Count}개";
 
-                DataStorage.Instance.SetLots(parsedData);
+                DataManager.Instance.dataStorage.SetLots(parsedData);
                 itemManager.SpawnLots();
             }
 
@@ -128,7 +128,7 @@ public class NamedPipeManualClient : MonoBehaviour
                 var parsedData = JsonUtility.FromJson<RawStackMapList>(msg);
 
                 // 2) 가공된 데이터로 나누기
-                DataStorage.Instance.SetStackMap(parsedData);
+                DataManager.Instance.dataStorage.SetStackMap(parsedData);
 
                 // 이후 stackMapListData.FloorDict로 빠른 조회 가능
                 displayText.text = $"파싱 및 로드 완료: {parsedData.stackmap_list.Count}개";

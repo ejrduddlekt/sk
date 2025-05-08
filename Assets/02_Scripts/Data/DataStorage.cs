@@ -1,34 +1,22 @@
 using UnityEngine;
 using Data;
-
-public class DataStorage : MonoBehaviour
+using VInspector;
+[System.Serializable]
+public class DataStorage
 {
-    public static DataStorage Instance { get; private set; }
-
+    [Tab("Lots")]
     [Header("Wafer 데이터")]
     public LotsList lotsList;
-
+    [Tab("Stack Map")]
     [Header("스택맵 데이터")]
     public RawStackMapList rawStackMapList;
     public StackMapList stackMapList;
     public StackMapArgumentList stackMapArgumentList;
-
+    [Tab("NoInkMap")]
     [Header("노잉크맵 데이터")]
     public NoInkMapList noInkMapList;
-
     [Header("노잉크맵 컬러 등급 데이터")]
     public NoInkMapGradeColorList noInkMapGradeColorList;
-
-    void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject); // 필요 시 생존 유지
-    }
 
     public void SetLots(LotsList lots)
     {

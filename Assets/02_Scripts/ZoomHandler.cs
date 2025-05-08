@@ -46,6 +46,11 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
     [Tooltip("확대/축소를 적용할 대상 Transform. 비어있으면 이 GameObject의 transform 사용")]
     [SerializeField] private Transform targetTransform;
 
+    // ① 현재 Stage 가 StackMapLayer 인지 판정
+    private bool StageActive =>
+        GameManager.Instance != null &&
+        GameManager.Instance.CurrentStage == SelectionStage.SelectStackMapLayer;
+
     void Awake()
     {
         // targetTransform이 미설정된 경우에만 기본 대상 할당
@@ -124,49 +129,47 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
 
     void Update()
     {
-        if (targetTransform != null)
+        // StackMapLayer 단계가 아니면 입력 무시
+        if (!StageActive || targetTransform == null) return;
+
+        /* ── 1) 줌 인/아웃 ─────────────────────────────── */
+        float deltaScroll = Input.GetAxisRaw("Mouse ScrollWheel") * scrollScale;
+        if (deltaScroll != 0)
         {
-            // 줌 인/아웃
-            float deltaScroll = Input.GetAxisRaw("Mouse ScrollWheel") * scrollScale;
-            if (deltaScroll != 0)
-            {
-                // apply zoom in/out factor
-                finalZoomFactor = Mathf.Round(finalZoomFactor + deltaScroll);
-                finalZoomFactor = Mathf.Clamp(finalZoomFactor, zoomFactorMin, zoomFactorMax);
-                Debug.Log("final = " + finalZoomFactor + " delta = " + deltaScroll);
+            finalZoomFactor = Mathf.Round(finalZoomFactor + deltaScroll);
+            finalZoomFactor = Mathf.Clamp(finalZoomFactor, zoomFactorMin, zoomFactorMax);
 
-                float newZoom = quadFuncA * finalZoomFactor * finalZoomFactor + quadFuncB * finalZoomFactor + quadFuncC;
-                SetZoom(newZoom);
-            }
+            float newZoom = quadFuncA * finalZoomFactor * finalZoomFactor +
+                            quadFuncB * finalZoomFactor + quadFuncC;
+            SetZoom(newZoom);
+        }
 
-            // 회전
-            if (Input.GetMouseButtonDown(1))
-            {
-                draggingForRotate = true;
-                GameManager.Instance.isDragModeActive = true;
-                posClick = Input.mousePosition;
-                dragX = dragY = 0;
-            }
-            if (Input.GetMouseButtonUp(1))
-            {
-                draggingForRotate = false;
-                GameManager.Instance.isDragModeActive = false;
-                rotateX = rotateX + dragX;
-                rotateY = rotateY - dragY;
-            }
-            if (draggingForRotate)
-            {
-                // calculate rotate-x from diff between posClick & curPos
-                Vector3 diff = Input.mousePosition - posClick;
-                float rotY = 360.0f * diff.x / Screen.width;
-                float rotX = 360.0f * diff.y / Screen.height;
+        /* ── 2) 우클릭 드래그 회전 ─────────────────────── */
+        if (Input.GetMouseButtonDown(1))
+        {
+            draggingForRotate = true;
+            GameManager.Instance.isDragModeActive = true;
+            posClick = Input.mousePosition;
+            dragX = dragY = 0;
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            draggingForRotate = false;
+            GameManager.Instance.isDragModeActive = false;
+            rotateX += dragX;
+            rotateY -= dragY;
+        }
+        if (draggingForRotate)
+        {
+            Vector3 diff = Input.mousePosition - posClick;
+            float rotY = 360f * diff.x / Screen.width;
+            float rotX = 360f * diff.y / Screen.height;
 
-                dragX = rotX;
-                dragY = rotY;
-                Quaternion rot = Quaternion.AngleAxis(rotateY - dragY, Vector3.up);
-                rot = Quaternion.AngleAxis(rotateX + dragX, Camera.main.transform.right) * rot;
-                targetTransform.rotation = rot;
-            }
+            dragX = rotX;
+            dragY = rotY;
+            Quaternion rot = Quaternion.AngleAxis(rotateY - dragY, Vector3.up);
+            rot = Quaternion.AngleAxis(rotateX + dragX, Camera.main.transform.right) * rot;
+            targetTransform.rotation = rot;
         }
     }
 }

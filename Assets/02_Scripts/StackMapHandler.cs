@@ -1,7 +1,6 @@
 using Data;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 /// <summary>
 /// 스택맵 및 노잉크맵 선택 상태를 중앙에서 관리합니다.
@@ -31,7 +30,7 @@ public class StackMapHandler : MonoBehaviour
         {
             var gameManager = GameManager.Instance;
 
-            if (gameManager.isDragModeActive == true || gameManager.CurrentStage != SelectionStage.StackMapLayer || _currentHighlighted == value)
+            if (gameManager.isDragModeActive == true || gameManager.CurrentStage != SelectionStage.SelectStackMapLayer || _currentHighlighted == value)
                 return;
 
             // 이전 오브젝트 비활성화
@@ -58,7 +57,7 @@ public class StackMapHandler : MonoBehaviour
         {
             var gameManager = GameManager.Instance;
 
-            if (gameManager.isDragModeActive == true || gameManager.CurrentStage != SelectionStage.StackMapLayer || _currentStackMapLayer == value)
+            if (gameManager.isDragModeActive == true || gameManager.CurrentStage != SelectionStage.SelectStackMapLayer || _currentStackMapLayer == value)
                 return;
 
             _currentStackMapLayer = value;
@@ -115,7 +114,7 @@ public class StackMapHandler : MonoBehaviour
                 if (clickHandler != null)
                 {
                     // 해당 칩의 인자를 가져와 Initialize
-                    if (DataStorage.Instance
+                    if (DataManager.Instance.dataStorage
                         .stackMapArgumentList
                         .TryGetArgument(int.Parse(data.STACK_NO),
                                         new Vector2Int(x, y),

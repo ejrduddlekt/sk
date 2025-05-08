@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc90ea0aae1cbf4ea233aa083f3c5a7, type: 3}
+  m_Name: ItemStorageSO
+  m_EditorClassIdentifier: 
+  lotsPrefab: {fileID: 2455522348059763856, guid: b22c3b1c5d044cd4298776386d61419e, type: 3}
+  stackMapLayerPrefab: {fileID: 5791771056805091536, guid: d6c44f973b6d9a741beea6f1b64dbca0, type: 3}
+  stackMapPrefab: {fileID: 5074909095612646697, guid: be92cc74a7b2fca41a3e1034decc6f3b, type: 3}
+  noInkMapPrefab: {fileID: 0}
+  gradeColorPrefab: {fileID: 0}

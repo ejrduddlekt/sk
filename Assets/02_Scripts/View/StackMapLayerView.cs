@@ -12,6 +12,12 @@ public class StackMapLayerView : MonoBehaviour, IRecordView<Data.StackMap>
     [Header("Stack Info")]
     [SerializeField] TMP_Text stackNoText;
 
+    [Header("Double-click 설정")]
+    [Tooltip("두 번 클릭을 한 번으로 인식할 최대 간격(초)")]
+    [SerializeField] private float doubleClickThreshold = 0.3f;
+
+    private float lastClickTime = -1f;   // 직전 클릭 시각
+
     private Data.StackMap _data;
     public event Action<Data.StackMap> OnClicked;
     private StackMapMover mover;
@@ -46,7 +52,18 @@ public class StackMapLayerView : MonoBehaviour, IRecordView<Data.StackMap>
 
     void OnMouseDown()
     {
-        OnClicked?.Invoke(_data);         // 기존 방식 (데이터용)
+        float now = Time.time;
+
+        // 직전 클릭과의 간격이 threshold 이하 → 더블-클릭으로 간주
+        if (now - lastClickTime <= doubleClickThreshold)
+        {
+            lastClickTime = -1f;               // 리셋
+            OnClicked?.Invoke(_data);          // 더블-클릭 이벤트 발동
+        }
+        else
+        {
+            lastClickTime = now;               // 첫번째 클릭 기록
+        }
     }
 }
 
