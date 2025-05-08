@@ -42,6 +42,11 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
     private float rotateY = 0f;
     private float dragX, dragY;
 
+    // 회전 초기 상태 저장용
+    private Quaternion _initialRotation;
+    // 줌 초기 상태 저장용
+    private float _initialZoom;
+
     // 확대/축소를 적용할 대상 Transform (UI면 RectTransform, 3D면 Transform)
     [Tooltip("확대/축소를 적용할 대상 Transform. 비어있으면 이 GameObject의 transform 사용")]
     [SerializeField] private Transform targetTransform;
@@ -56,6 +61,11 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
         // targetTransform이 미설정된 경우에만 기본 대상 할당
         if (targetTransform == null)
             targetTransform = transform;
+
+        // 초기 회전·줌 저장
+        _initialRotation = targetTransform.rotation;
+        _initialZoom = Zoom;
+
         ApplyZoom();
 
         if (zoomInButton != null)
@@ -150,26 +160,55 @@ public class ZoomHandler : MonoBehaviour, IScrollHandler
             draggingForRotate = true;
             GameManager.Instance.isDragModeActive = true;
             posClick = Input.mousePosition;
-            dragX = dragY = 0;
+            dragX = dragY = 0f;
         }
         if (Input.GetMouseButtonUp(1))
         {
             draggingForRotate = false;
             GameManager.Instance.isDragModeActive = false;
-            rotateX += dragX;
+            // Yaw는 그대로 누적하고…
             rotateY -= dragY;
+            // Pitch는 누적 후에도 클램프
+            rotateX = Mathf.Clamp(rotateX + dragX, -40f, 30f);
         }
+
         if (draggingForRotate)
         {
             Vector3 diff = Input.mousePosition - posClick;
-            float rotY = 360f * diff.x / Screen.width;
-            float rotX = 360f * diff.y / Screen.height;
+            float deltaYaw = 360f * diff.x / Screen.width;   // 좌우
+            float deltaPitch = 360f * diff.y / Screen.height;  // 상하
 
-            dragX = rotX;
-            dragY = rotY;
-            Quaternion rot = Quaternion.AngleAxis(rotateY - dragY, Vector3.up);
-            rot = Quaternion.AngleAxis(rotateX + dragX, Camera.main.transform.right) * rot;
+            dragY = deltaYaw;
+            dragX = deltaPitch;
+
+            // 누적된 rotateY, rotateX 에서 실시간 delta를 뺀/더한 값 사용
+            float yaw = rotateY - dragY;
+            float pitch = Mathf.Clamp(rotateX + dragX, -30f, 30f);
+
+            // Yaw: 글로벌 Y축, Pitch: 글로벌 X축
+            Quaternion rot = Quaternion.AngleAxis(yaw, Vector3.up);
+            rot = Quaternion.AngleAxis(pitch, Vector3.right) * rot;
+
             targetTransform.rotation = rot;
         }
+    }
+
+    /// <summary>
+    /// 드래그·회전 상태와 줌을 모두 초기화합니다.
+    /// </summary>
+    public void ResetDragAndRotation()
+    {
+        // 1) 드래그 상태 초기화
+        draggingForRotate = false;
+        GameManager.Instance.isDragModeActive = false;
+        rotateX = rotateY = dragX = dragY = 0f;
+        posClick = Vector3.zero;
+
+        // 2) 회전 복원
+        targetTransform.rotation = _initialRotation;
+
+        // 3) 줌(크기) 복원
+        finalZoomFactor = 0f;     // quadratic scroll 기준도 원위치로
+        SetZoom(_initialZoom);    // Zoom 프로퍼티와 localScale 업데이트
     }
 }

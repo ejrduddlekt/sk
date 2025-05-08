@@ -789,6 +789,9 @@ MonoBehaviour:
   noInkMapView: {fileID: 268228964}
   chipPrefab: {fileID: 5074909095612646697, guid: be92cc74a7b2fca41a3e1034decc6f3b, type: 3}
   totalGridSize: 1
+  SelStackLayerPosition: {fileID: 1595656278}
+  selectMoveDuration: 0.3
+  selectMoveEase: 6
 --- !u!1 &192805545
 GameObject:
   m_ObjectHideFlags: 0
@@ -1389,6 +1392,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 170172810}
     m_Modifications:
+    - target: {fileID: 2937396812965859127, guid: d6c44f973b6d9a741beea6f1b64dbca0, type: 3}
+      propertyPath: hoverDistance
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 5791771056805091536, guid: d6c44f973b6d9a741beea6f1b64dbca0, type: 3}
       propertyPath: m_Name
       value: StackMapLayer (1)
@@ -4415,6 +4422,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094403817}
   m_CullTransparentMesh: 1
+--- !u!1 &1104390483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1104390484}
+  m_Layer: 0
+  m_Name: SelStackPosition_StackLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1104390484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104390483}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.72, y: 0, z: 2.02}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1152636712
 GameObject:
   m_ObjectHideFlags: 0
@@ -6046,6 +6084,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1574019220}
   m_CullTransparentMesh: 1
+--- !u!1 &1595656277
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595656278}
+  m_Layer: 0
+  m_Name: SelStackPosition_Stack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1595656278
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595656277}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.53729963, y: 0, z: 0, w: 0.8433914}
+  m_LocalPosition: {x: -2.61, y: 2.81, z: -1.02}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: -65, y: 0, z: 0}
 --- !u!1 &1612986577
 GameObject:
   m_ObjectHideFlags: 0
@@ -6334,6 +6403,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 170172810}
     m_Modifications:
+    - target: {fileID: 2937396812965859127, guid: d6c44f973b6d9a741beea6f1b64dbca0, type: 3}
+      propertyPath: hoverDistance
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 5791771056805091536, guid: d6c44f973b6d9a741beea6f1b64dbca0, type: 3}
       propertyPath: m_Name
       value: StackMapLayer (2)
@@ -7884,6 +7957,8 @@ SceneRoots:
   - {fileID: 330585546}
   - {fileID: 639037553}
   - {fileID: 1256492258}
+  - {fileID: 1595656278}
+  - {fileID: 1104390484}
   - {fileID: 170172810}
   - {fileID: 1884161821}
   - {fileID: 1226224304}
