@@ -15,7 +15,7 @@ public class StackMapMover : MonoBehaviour
     private StackMapHandler handler;
 
     private Outline outline;
-    private Quaternion originalRotation;
+    public Quaternion originalRotation;
 
     private bool _isSelect = false;
 
@@ -50,8 +50,6 @@ public class StackMapMover : MonoBehaviour
             Debug.LogWarning("moveTarget이 설정되지 않았습니다.", this);
 
         outline = moveTarget.GetComponent<Outline>();
-        originalRotation = moveTarget.localRotation;
-
         handler = GetComponentInParent<StackMapHandler>();
     }
 

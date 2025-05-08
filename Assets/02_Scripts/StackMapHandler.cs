@@ -77,6 +77,10 @@ public class StackMapHandler : MonoBehaviour
         // 1) 리스트에 추가 & 데이터 바인딩
         stackMapViews.Add(view);
         view.Init(data);
+        var mover = view.GetComponentInParent<StackMapMover>();
+
+        mover.transform.position = new Vector3(0, stackMapViews.Count, 0);
+        mover.originalRotation = mover.transform.localRotation;
 
         // 2) 컬럼/로우 개수
         int cols = data.X_AXIS + 1;
