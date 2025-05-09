@@ -64,6 +64,7 @@ public class ItemSpawner : MonoBehaviour
             controller.SetStackMapViews(view, item);
 
             view.OnClicked += OnStackMapClicked;
+            view.OnViewClicked += OnStackMapDoubleClicked;
         }
     }
 
@@ -138,8 +139,12 @@ public class ItemSpawner : MonoBehaviour
     protected virtual void OnStackMapClicked(StackMap map)
     {
         SelectedStackMap = map;
-        GameManager.Instance.CurrentStage = SelectionStage.SelectChip;
         Debug.Log($"SelectedStackMap: LOT={map.LOT_ID}, WF={map.WF_ID}");
+    }
+
+    protected virtual void OnStackMapDoubleClicked(StackMapLayerView map)
+    {
+        map.GetComponentInParent<StackMapMover>().handler.CurrentStackMapLayer = map;
     }
 
     /// <summary>

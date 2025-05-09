@@ -12,7 +12,7 @@ public class StackMapMover : MonoBehaviour
     [SerializeField] private Ease moveEase = Ease.OutQuad;
     [SerializeField] private Color highlightColor = Color.yellow;
     [SerializeField] private float highlightWidth = 3f;
-    private StackMapHandler handler;
+    public StackMapHandler handler;
 
     private Outline outline;
     public Quaternion originalRotation;

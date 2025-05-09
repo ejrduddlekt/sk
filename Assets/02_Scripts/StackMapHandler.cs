@@ -30,7 +30,10 @@ public class StackMapHandler : MonoBehaviour
     [SerializeField] private Ease selectMoveEase = Ease.OutQuad;
 
     // 각 뷰의 원래 월드 위치를 저장
-    private Dictionary<StackMapLayerView, Vector3> _originalPositions = new();
+    // 원위치 저장용
+    private Dictionary<StackMapLayerView, Vector3> _originalPositions = new Dictionary<StackMapLayerView, Vector3>();
+    private Dictionary<StackMapLayerView, Quaternion> _originalRotations = new Dictionary<StackMapLayerView, Quaternion>();
+
 
     private StackMapMover _currentHighlighted;
     /// <summary>
@@ -71,20 +74,26 @@ public class StackMapHandler : MonoBehaviour
         set
         {
             var gm = GameManager.Instance;
+            // 드래그 모드 중이거나 같은 뷰를 재설정하는 건 무시
             if (gm.isDragModeActive || _currentStackMapLayer == value)
                 return;
 
-            // 1) 이전 선택 해제: 원위치로 애니메이션
+            // 1) 이전 선택 해제: 원래 자리·회전으로 되돌림
             if (_currentStackMapLayer != null)
             {
                 var prev = _currentStackMapLayer;
                 prev.transform.DOKill();
-                prev.transform
-                    .DOMove(_originalPositions[prev], selectMoveDuration)
-                    .SetEase(selectMoveEase)
+
+                DOTween.Sequence()
+                    .Append(prev.transform
+                        .DOMove(_originalPositions[prev], selectMoveDuration)
+                        .SetEase(selectMoveEase))
+                    .Join(prev.transform
+                        .DORotateQuaternion(_originalRotations[prev], selectMoveDuration)
+                        .SetEase(selectMoveEase))
                     .OnComplete(() =>
                     {
-                        // 해제 애니메이션 완료 후 단계 복원
+                        // 해제 애니메이션 끝나면 단계 복원
                         if (value == null)
                             gm.CurrentStage = SelectionStage.SelectStackMapLayer;
                     });
@@ -92,25 +101,27 @@ public class StackMapHandler : MonoBehaviour
 
             _currentStackMapLayer = value;
 
-            // 2) 새로 선택된 레이어 있으면 SelStackLayerPosition으로 이동
+            // 2) 새로 선택된 레이어가 있으면 목표 위치·회전으로 애니메이션
             if (_currentStackMapLayer != null)
             {
-                _currentStackMapLayer.transform.DOKill();
-                _currentStackMapLayer.transform
-                    .DOMove(SelStackLayerPosition.position, selectMoveDuration)
-                    .SetEase(selectMoveEase)
+                var tr = _currentStackMapLayer.transform;
+                tr.DOKill();
+
+                DOTween.Sequence()
+                    .Append(tr
+                        .DOMove(SelStackLayerPosition.position, selectMoveDuration)
+                        .SetEase(selectMoveEase))
+                    .Join(tr
+                        .DORotateQuaternion(SelStackLayerPosition.rotation, selectMoveDuration)
+                        .SetEase(selectMoveEase))
                     .OnComplete(() =>
                     {
-                        // 선택 애니메이션 완료 후 칩 선택 단계로
+                        // 이동 완료 후 칩 선택 단계로 전환
                         gm.CurrentStage = SelectionStage.SelectChip;
                     });
             }
-            else
-            {
-                // 값이 null이지만, 이전이 없어서 애니메이션 자체가 없을 때
-                // 바로 단계 복원이 필요하다면 여기도 처리할 수 있습니다.
-                // gm.CurrentStage = SelectionStage.SelectStackMapLayer;
-            }
+            // else: value == null 이고 이전 애니메이션이 없던 경우, 
+            // 바로 단계를 복원하고 싶으면 여기에 추가 처리
         }
     }
 
@@ -139,6 +150,7 @@ public class StackMapHandler : MonoBehaviour
         Vector3 startPos = new Vector3(0, stackMapViews.Count, 0);
         mover.transform.position = startPos;
         _originalPositions[view] = startPos;
+        _originalRotations[view] = view.transform.rotation;
         mover.originalRotation = mover.transform.localRotation;
 
         // 3) 칩 생성

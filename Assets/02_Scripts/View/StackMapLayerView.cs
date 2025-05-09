@@ -20,6 +20,7 @@ public class StackMapLayerView : MonoBehaviour, IRecordView<Data.StackMap>
 
     private Data.StackMap _data;
     public event Action<Data.StackMap> OnClicked;
+    public event Action<StackMapLayerView> OnViewClicked;   // ★ 뷰 인스턴스
     private StackMapMover mover;
 
     public void Init(Data.StackMap data)
@@ -59,6 +60,7 @@ public class StackMapLayerView : MonoBehaviour, IRecordView<Data.StackMap>
         {
             lastClickTime = -1f;               // 리셋
             OnClicked?.Invoke(_data);          // 더블-클릭 이벤트 발동
+            OnViewClicked?.Invoke(this);
         }
         else
         {
